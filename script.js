@@ -1,15 +1,14 @@
 
-import { pipeline } from "./transformers.js";
-
+//import { pipeline } from "./transformers.js";
+import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.2.1";
 (() => {
   const _fetch = globalThis.fetch;
   globalThis.fetch = async function fetch() {
-    console.log(...arguments);
-    if (String(arguments[0]).endsWith('ort-wasm-simd-threaded.jsep.wasm')) {
-      const loc = location.href.split('/');
-      loc.pop();
-      return new Response((await _fetch(`${loc.join('/')}/ort-wasm-simd-threaded.jsep.wasm.gz`)).body.pipeThrough(new DecompressionStream("gzip")), { headers: { "content-type": "application/wasm" } });
-    }
+    /* if (String(arguments[0]).endsWith('ort-wasm-simd-threaded.jsep.wasm')) {
+       const loc = location.href.split('/');
+       loc.pop();
+       return new Response((await _fetch(`${loc.join('/')}/ort-wasm-simd-threaded.jsep.wasm.gz`)).body.pipeThrough(new DecompressionStream("gzip")), { headers: { "content-type": "application/wasm" } });
+     }*/
     return _fetch.apply(this, arguments);
   };
 })();
@@ -17,7 +16,8 @@ import { pipeline } from "./transformers.js";
 // Create a text generation pipeline
 const generator = await pipeline(
   "text-generation",
-  "Xenova/distilgpt2",
+  // "Xenova/distilgpt2",
+  "LaMini-T5-738M"
 );
 
 // Generate text
