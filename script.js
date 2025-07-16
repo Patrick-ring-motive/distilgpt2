@@ -1,6 +1,16 @@
 
 import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.2.1";
 
+(() => {
+
+  const _instantiateStreaming = WebAssembly.instantiateStreaming;
+  WebAssembly.instantiateStreaming = function instantiateStreaming() {
+    console.log(...arguments);
+    return _instantiateStreaming.apply(WebAssembly, arguments);
+  };
+
+})();
+
 // Create a text generation pipeline
 const generator = await pipeline(
   "text-generation",
