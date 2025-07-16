@@ -1,6 +1,7 @@
 
 //import { pipeline } from "./transformers.js";
 import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.2.1";
+globalThis.pipeline = pipeline;
 /*(() => {
   const _fetch = globalThis.fetch;
   globalThis.fetch = async function fetch() {
@@ -16,8 +17,8 @@ import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers
 const generator = await pipeline(
   "text-generation",
   // "Xenova/distilgpt2",
-  "Xenova/LaMini-T5-738M"
-  //"Xenova/TinyLLama-v0"
+  //"Xenova/LaMini-T5-738M"
+  "Xenova/TinyLLama-v0"
 );
 
 // Generate text
