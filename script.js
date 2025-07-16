@@ -18,7 +18,7 @@ const generator = await pipeline(
   "text-generation",
   // "Xenova/distilgpt2",
   //"Xenova/LaMini-T5-738M"
-  "Xenova/TinyLLama-v0"
+  "Xenova/LaMini-GPT-124M"
 );
 
 // Generate text
