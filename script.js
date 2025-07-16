@@ -27,7 +27,7 @@ globalThis.TextStreamer = TextStreamer;
 //const output = await generator("Who are you?", { max_new_tokens: 64, do_sample: true });
 //console.log(output[0].generated_text);
 const _log = console.log;
-const log = text => {
+const log = async(text) => {
   (document.querySelector('output') ?? document.getElementsByTagName('output')?.[0] ?? {}).innerHTML += ` ${text}`;
   _log(text);
 };
