@@ -46,9 +46,11 @@ console.log = log;
 //const output = await generator(messages, { max_new_tokens: 512, do_sample: false, streamer });
 
 // Generate text
-for(const _ of Array(20)){
-  const output = await generator('What is Python?', { max_length: 1, do_sample: true, top_k: 10, streamer });
+const context = ['What is Python?'];
+for (const _ of Array(20)) {
+  const output = await generator(context.join(''), { max_length: 1, do_sample: true, top_k: 10, streamer });
+  context.push(output[0].generated_text.at(-1).content);
 }
-  console.log(output);
+console.log(output);
 console.log(output[0].generated_text.at(-1).content);
 console.log(new Date().getTime() - start);
