@@ -3,6 +3,7 @@
 import { pipeline, TextStreamer } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.2.1";
 //import { pipeline } from "https://cdn.jsdelivr.net/npm/@xenova/transformers";
 globalThis.pipeline = pipeline;
+globalThis.TextStreamer = TextStreamer;
 /*(() => {
   const _fetch = globalThis.fetch;
   globalThis.fetch = async function fetch() {
