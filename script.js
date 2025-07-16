@@ -48,7 +48,7 @@ console.log = log;
 // Generate text
 const context = ['What is Python?'];
 for (const _ of Array(20)) {
-  const output = await generator(context.join(''), { max_length: 128, do_sample: true, top_k: 10, streamer });
+  const output = await generator(context.join(''), { max_length: 1, do_sample: true, top_k: 10, streamer });
   _log(context.join(' '));
   context.push(output[0].generated_text.at(-1).content);
 }
