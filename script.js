@@ -28,7 +28,7 @@ globalThis.pipeline = pipeline;
 
 const generator = await pipeline('text2text-generation', 'Xenova/flan-alpaca-base');
 console.log('loaded');
-const start = new Date().getTime();
+
 const streamer = new TextStreamer(generator.tokenizer, {
   skip_prompt: true,
 })
