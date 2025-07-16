@@ -15,13 +15,19 @@ globalThis.pipeline = pipeline;
 })();*/
 
 // Create a text generation pipeline
-const generator = await pipeline(
-  "text-generation",
-  // "Xenova/distilgpt2",
-  //"Xenova/LaMini-T5-738M"
-  "Xenova/flan-alpaca-base"
-);
+//const generator = await pipeline(
+//"text-generation",
+// "Xenova/distilgpt2",
+//"Xenova/LaMini-T5-738M"
+// "Xenova/flan-alpaca-base"
+//);
 
 // Generate text
-const output = await generator("Who are you?", { max_new_tokens: 64, do_sample: true });
-console.log(output[0].generated_text);
+//const output = await generator("Who are you?", { max_new_tokens: 64, do_sample: true });
+//console.log(output[0].generated_text);
+
+const generator = await pipeline('text2text-generation', 'Xenova/flan-alpaca-base');
+
+// Generate text
+const output = await generator('What is Python?', { max_length: 128, do_sample: true, top_k: 10, });
+console.log(output);
