@@ -1,5 +1,5 @@
 
-import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.2.1";
+import { pipeline } from "./transformers.js";
 
 (() => {
   const _fetch = globalThis.fetch;
