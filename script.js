@@ -27,7 +27,7 @@ globalThis.TextStreamer = TextStreamer;
 //const output = await generator("Who are you?", { max_new_tokens: 64, do_sample: true });
 //console.log(output[0].generated_text);
 const _log = console.log;
-const log = async(text) => {
+const log = async (text) => {
   (document.querySelector('output') ?? document.getElementsByTagName('output')?.[0] ?? {}).innerHTML += ` ${text}`;
   _log(text);
 };
@@ -46,7 +46,9 @@ console.log = log;
 //const output = await generator(messages, { max_new_tokens: 512, do_sample: false, streamer });
 
 // Generate text
-const output = await generator('What is Python?', { max_length: 128, do_sample: true, top_k: 10, streamer });
-console.log(output);
+for(const _ of Array(20)){
+  const output = await generator('What is Python?', { max_length: 1, do_sample: true, top_k: 10, streamer });
+}
+  console.log(output);
 console.log(output[0].generated_text.at(-1).content);
 console.log(new Date().getTime() - start);
