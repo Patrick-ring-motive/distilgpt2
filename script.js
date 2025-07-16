@@ -27,7 +27,7 @@ globalThis.TextStreamer = TextStreamer;
 //const output = await generator("Who are you?", { max_new_tokens: 64, do_sample: true });
 //console.log(output[0].generated_text);
 const log = text => {
-  (document.querySelector('output') ?? document.getElementsByTagName('output') ?? {}).innerHTML += ` ${text}`;
+  (document.querySelector('output') ?? document.getElementsByTagName('output')?.[0] ?? {}).innerHTML += ` ${text}`;
 };
 const start = new Date().getTime();
 const generator = await pipeline('text2text-generation', 'Xenova/flan-alpaca-base');
