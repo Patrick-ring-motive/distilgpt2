@@ -1,7 +1,7 @@
 
 //import { pipeline } from "./transformers.js";
 //import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.2.1";
-import { pipeline } from "https://cdn.jsdelivr.net/npm/@xenova/transformers";
+import { pipeline, TextStreamer } from "https://cdn.jsdelivr.net/npm/@xenova/transformers";
 globalThis.pipeline = pipeline;
 /*(() => {
   const _fetch = globalThis.fetch;
@@ -29,7 +29,15 @@ globalThis.pipeline = pipeline;
 const generator = await pipeline('text2text-generation', 'Xenova/flan-alpaca-base');
 console.log('loaded');
 const start = new Date().getTime();
+const streamer = new TextStreamer(generator.tokenizer, {
+  skip_prompt: true,
+})
+
+// Generate a response
+//const output = await generator(messages, { max_new_tokens: 512, do_sample: false, streamer });
+
 // Generate text
-const output = await generator('What is Python?', { max_length: 128, do_sample: true, top_k: 10, });
+const output = await generator('What is Python?', { max_length: 128, do_sample: true, top_k: 10, streamer });
 console.log(output);
+console.log(output[0].generated_text.at(-1).content);
 console.log(new Date().getTime() - start);

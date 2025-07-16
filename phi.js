@@ -14,7 +14,6 @@ const messages = [
 // Create text streamer
 const streamer = new TextStreamer(generator.tokenizer, {
   skip_prompt: true,
-  // callback_function: (text) => { }, // Optional callback function
 })
 
 // Generate a response
