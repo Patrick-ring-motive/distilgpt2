@@ -1,4 +1,4 @@
-import { pipeline, TextStreamer } from "@huggingface/transformers";
+import { pipeline, TextStreamer } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers";
 
 // Create a text generation pipeline
 const generator = await pipeline(
@@ -8,7 +8,7 @@ const generator = await pipeline(
 
 // Define the list of messages
 const messages = [
-  { role: "user", content:  "Solve the equation: x^2 - 3x + 2 = 0" },
+  { role: "user", content: "Solve the equation: x^2 - 3x + 2 = 0" },
 ];
 
 // Create text streamer
