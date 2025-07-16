@@ -14,7 +14,20 @@ globalThis.TextStreamer = TextStreamer;
     return _fetch.apply(this, arguments);
   };
 })();*/
-
+window.log = (e) => {
+  console.log(e);
+  (
+    document.querySelector("output") ??
+    document.getElementsByTagName("output")?.[0] ??
+    {}
+  ).innerHTML += "<br>" + (e.message ?? e);
+};
+window.addEventListener("error", function (e) {
+  log(e?.message);
+  [...arguments].forEach((x) => {
+    log("window error " + (x?.message ?? x));
+  });
+});
 // Create a text generation pipeline
 //const generator = await pipeline(
 //"text-generation",
@@ -49,7 +62,7 @@ console.log = log;
 const context = ['What is Python?'];
 for (const _ of Array(20)) {
   const output = await generator(context.join(''), { max_length: 1, do_sample: true, top_k: 10, streamer });
-  await _log(context.join(' '));
+  await log(context.join(' '));
   //await sleep(100);
     context.push(output[0].generated_text.at(-1).content);
 }
