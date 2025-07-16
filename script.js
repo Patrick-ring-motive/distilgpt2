@@ -1,7 +1,7 @@
 
 //import { pipeline } from "./transformers.js";
-//import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.2.1";
-import { pipeline, TextStreamer } from "https://cdn.jsdelivr.net/npm/@xenova/transformers";
+import { pipeline, TextStreamer } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.2.1";
+//import { pipeline } from "https://cdn.jsdelivr.net/npm/@xenova/transformers";
 globalThis.pipeline = pipeline;
 /*(() => {
   const _fetch = globalThis.fetch;
