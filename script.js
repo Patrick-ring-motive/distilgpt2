@@ -16,7 +16,8 @@ import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers
 const generator = await pipeline(
   "text-generation",
   // "Xenova/distilgpt2",
-  "LaMini-T5-738M"
+  "Xenova/LaMini-T5-738M"
+  //"Xenova/TinyLLama-v0"
 );
 
 // Generate text
