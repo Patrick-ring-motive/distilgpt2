@@ -35,7 +35,7 @@ const generator = await pipeline('text2text-generation', 'Xenova/flan-alpaca-bas
 
 const streamer = new TextStreamer(generator.tokenizer, {
   skip_prompt: true,
-  callback_function: log
+  token_callback_function: log
 })
 
 // Generate a response
