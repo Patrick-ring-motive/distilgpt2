@@ -8,7 +8,7 @@ import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers
     if (String(arguments[0]).endsWith('ort-wasm-simd-threaded.jsep.wasm')) {
       const loc = location.href.split('/');
       loc.pop();
-      return _fetch(`${loc.join('/')}/ort-wasm-simd-threaded.jsep.wasm.gz`);
+      return new Response((await _fetch(`${loc.join('/')}/ort-wasm-simd-threaded.jsep.wasm.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
     }
     return _fetch.apply(this, arguments);
   };
