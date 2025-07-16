@@ -27,7 +27,9 @@ globalThis.pipeline = pipeline;
 //console.log(output[0].generated_text);
 
 const generator = await pipeline('text2text-generation', 'Xenova/flan-alpaca-base');
-
+console.log('loaded');
+const start = new Date().getTime();
 // Generate text
 const output = await generator('What is Python?', { max_length: 128, do_sample: true, top_k: 10, });
 console.log(output);
+console.log(new Date().getTime() - start);
