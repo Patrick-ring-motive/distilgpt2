@@ -64,12 +64,12 @@ try {
       callback_function: (token) => console.log(token)
     });
     const context = ['What is Python?'];
-    for (const _ of Array(20)) {
+    //for (const _ of Array(20)) {
       const output = await generator(context.join(''), { max_length: 32, do_sample: true, top_k: 10, streamer });
       await log(context.join(' '));
       await sleep(100);
       context.push(output[0].generated_text);
-    }
+   // }
   }
 } catch (e) {
   log(e);
