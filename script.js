@@ -67,7 +67,7 @@ try {
       const output = await generator(context.join(''), { max_length: 1, do_sample: true, top_k: 10, streamer });
       await log(context.join(' '));
       await sleep(100);
-      _log(output)
+      console.log(output)
       context.push(output[0].generated_text.at(-1).content);
     }
   }
