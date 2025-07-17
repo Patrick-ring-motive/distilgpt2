@@ -55,7 +55,7 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Generate a response
 if (/mobile/i.test(navigator.userAgent)) {
-  const output = await generator("Once upon a time,", { max_new_tokens: 64, do_sample: true });
+  const output = await generator("Once upon a time,", { max_new_tokens: 32, do_sample: true });
   log(output[0].generated_text.at(-1).content);
 } else {
   // Generate text
