@@ -1,7 +1,7 @@
 
 (async () => {
   //import { pipeline } from "./transformers.js";
-  const { pipeline, TextStreamer } = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.2.1";
+  const { pipeline, TextStreamer } = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.2.1");
   //import { pipeline } from "https://cdn.jsdelivr.net/npm/@xenova/transformers";
   globalThis.pipeline = pipeline;
   globalThis.TextStreamer = TextStreamer;
