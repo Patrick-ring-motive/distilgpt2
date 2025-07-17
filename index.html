@@ -6,6 +6,22 @@
   <meta name="viewport" content="width=device-width">
   <title>replit</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
+  <script>
+    ReadableStream.prototype[Symbol.asyncIterator] ??=
+    async function* asyncIterator() {
+      const reader = this?.getReader?.();
+      try {
+        let chunk = await reader.read();
+        while (chunk?.done === false) {
+          yield chunk?.value;
+          chunk = await reader?.read?.();
+        }
+      } finally {
+        reader?.releaseLock?.();
+      }
+    };
+    
+  </script>
 </head>
 
 <body>

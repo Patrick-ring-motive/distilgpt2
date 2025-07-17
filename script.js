@@ -29,23 +29,18 @@ window.addEventListener("error", function (e) {
   });
 });
 // Create a text generation pipeline
-//const generator = await pipeline(
-//"text-generation",
-// "Xenova/distilgpt2",
-//"Xenova/LaMini-T5-738M"
-// "Xenova/flan-alpaca-base"
-//);
+const generator = /mobile/i.test(navigator.userAgent)?await pipeline(
+"text-generation",
+"Xenova/distilgpt2",
+)
+  :
+  await pipeline('text2text-generation', 'Xenova/flan-alpaca-base');
+  ;
 
 // Generate text
 //const output = await generator("Who are you?", { max_new_tokens: 64, do_sample: true });
-//console.log(output[0].generated_text);
-const _log = console.log;
-const log = async (text) => {
-  (document.querySelector('output') ?? document.getElementsByTagName('output')?.[0] ?? {}).innerHTML += ` ${text}`;
-  _log(text);
-};
-const start = new Date().getTime();
-const generator = await pipeline('text2text-generation', 'Xenova/flan-alpaca-base');
+
+
 
 const sleep = (ms) => new Promise(resolve=>setTimeout(resolve,ms));
 const streamer = new TextStreamer(generator.tokenizer, {
@@ -53,16 +48,19 @@ const streamer = new TextStreamer(generator.tokenizer, {
 });
 
 
-console.log = log;
+
 
 // Generate a response
-//const output = await generator(messages, { max_new_tokens: 512, do_sample: false, streamer });
-
+if(/mobile/i.test(navigator.userAgent)){
+const output = await generator("Once upon a time,", { max_new_tokens: 64, do_sample: true });
+  log(output[0].generated_text.at(-1).content);
+}else{
 // Generate text
 const context = ['What is Python?'];
 for (const _ of Array(20)) {
   const output = await generator(context.join(''), { max_length: 1, do_sample: true, top_k: 10, streamer });
   await log(context.join(' '));
-  //await sleep(100);
+  await sleep(100);
     context.push(output[0].generated_text.at(-1).content);
+}
 }
