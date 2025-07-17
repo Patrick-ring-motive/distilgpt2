@@ -68,7 +68,7 @@ try {
       await log(context.join(' '));
       await sleep(100);
       console.log(output)
-      context.push(output[0].generated_text.at(-1).content);
+      context.push(output[0].generated_text);
     }
   }
 } catch (e) {
