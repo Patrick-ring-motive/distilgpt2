@@ -15,6 +15,6 @@ window.addEventListener("error", function(e) {
 const myWorker = new Worker("worker.js");
 
 myWorker.onmessage = (e) => {
-  result.textContent = e.data;
+  log(e.data);
   console.log("Message received from worker");
 };
