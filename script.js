@@ -20,7 +20,7 @@ window.log = (e) => {
     document.querySelector("output") ??
     document.getElementsByTagName("output")?.[0] ??
     {}
-  ).innerHTML += "<br>" + (e.message ?? e);
+  ).innerHTML += ("<br>" + (e.message ?? e));
 };
 window.addEventListener("error", function(e) {
   log(e?.message);
@@ -30,6 +30,7 @@ window.addEventListener("error", function(e) {
 });
 // Create a text generation pipeline
 let generator; 
+try{
 if (/mobile/i.test(navigator.userAgent)) {
   log("loading mobile model")
   generator = (await pipeline(
@@ -68,4 +69,7 @@ if (/mobile/i.test(navigator.userAgent)) {
     await sleep(100);
     context.push(output[0].generated_text.at(-1).content);
   }
+}
+}catch(e){
+  log(e);
 }
