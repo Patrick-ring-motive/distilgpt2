@@ -49,7 +49,7 @@ const context = ['What is Python?'];
   // Create a text generation pipeline
   let generator;
   try {
-    if (/mobile/i.test(navigator.userAgent)) {
+    if (false&&/mobile/i.test(navigator.userAgent)) {
       console.log("loading mobile model")
       generator = (await pipeline(
         "text-generation",
