@@ -32,12 +32,12 @@ const context = ['What is Python?'];
       if (String(arguments[0]).includes('encoder')) {
         const loc = location.href.split('/');
         loc.pop();
-        return new Response((await _fetch(`${loc.join('/')}/onnxencodermodelquantizedonnx.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
+        return new Response((await _fetch(`https://huggingface.co/datasets/Weblet/flan/resolve/main/onnxencodermodelquantizedonnx.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
       }
       if (String(arguments[0]).includes('decoder')) {
         const loc = location.href.split('/');
         loc.pop();
-        return new Response((await _fetch(`${loc.join('/')}/decoder_model_merged_quantized.onnx.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
+        return new Response((await _fetch(`https://huggingface.co/datasets/Weblet/flan/resolve/main/onnxdecodermodelmergedquantizedonnx.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
       }
       return _fetch.apply(this, arguments);
     };
