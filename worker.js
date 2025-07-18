@@ -1,20 +1,47 @@
-
+const context = ['What is Python?'];
 (async () => {
   //import { pipeline } from "./transformers.js";
-  const { pipeline, TextStreamer } = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.2.1");
+  //const { pipeline, TextStreamer } = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.2.1");
   //import { pipeline } from "https://cdn.jsdelivr.net/npm/@xenova/transformers";
+  const { pipeline, TextStreamer } = await import('./transformers.js');
   globalThis.pipeline = pipeline;
   globalThis.TextStreamer = TextStreamer;
-  /*(() => {
+  (() => {
     const _fetch = globalThis.fetch;
     globalThis.fetch = async function fetch() {
-       if (String(arguments[0]).endsWith('ort-wasm-simd-threaded.jsep.wasm')) {
-         const loc = location.href.split('/');
-         loc.pop();
-         return new Response((await _fetch(`${loc.join('/')}/ort-wasm-simd-threaded.jsep.wasm.gz`)).body.pipeThrough(new DecompressionStream("gzip")), { headers: { "content-type": "application/wasm" } });
+      if (String(arguments[0]).endsWith('ort-wasm-simd-threaded.jsep.wasm')) {
+        const loc = location.href.split('/');
+        loc.pop();
+        return new Response((await _fetch(`${loc.join('/')}/ort-wasm-simd-threaded.jsep.wasm.gz`)).body.pipeThrough(new DecompressionStream("gzip")), { headers: { "content-type": "application/wasm" } });
+      }
+      if (String(arguments[0]).endsWith('tokenizer_config.json')) {
+        const loc = location.href.split('/');
+        loc.pop();
+        return new Response((await _fetch(`${loc.join('/')}/tokenizerconfigjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
+      }
+      if (String(arguments[0]).endsWith('config.json')) {
+        const loc = location.href.split('/');
+        loc.pop();
+        return new Response((await _fetch(`${loc.join('/')}/configjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
+      }
+      if (String(arguments[0]).endsWith('tokenizer.json')) {
+        const loc = location.href.split('/');
+        loc.pop();
+        return new Response((await _fetch(`${loc.join('/')}/tokenizerjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
+      }
+      if (String(arguments[0]).includes('encoder')) {
+        const loc = location.href.split('/');
+        loc.pop();
+        return new Response((await _fetch(`${loc.join('/')}/onnxencodermodelquantizedonnx.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
+      }
+      if (String(arguments[0]).includes('decoder')) {
+        const loc = location.href.split('/');
+        loc.pop();
+        return new Response((await _fetch(`${loc.join('/')}/decoder_model_merged_quantized.onnx.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
+      }
       return _fetch.apply(this, arguments);
     };
-  })();*/
+  })();
   self.log = (msg) => {
     self.postMessage(msg);
   };
@@ -52,15 +79,15 @@
       // Generate text
       const streamer = new TextStreamer(generator.tokenizer, {
         skip_prompt: true,
-        callback_function: (token) => log(token)
+        callback_function: (token) => {
+          log(token);
+          context.push(token);
+        }
       });
-      const context = ['What is Python?'];
-      //for (const _ of Array(20)) {
       const output = await generator(context.join(''), { max_length: 32, do_sample: true, top_k: 10, streamer });
       await log(context.join(' '));
       await sleep(100);
       context.push(output[0].generated_text);
-      // }
     }
   } catch (e) {
     log(e);
