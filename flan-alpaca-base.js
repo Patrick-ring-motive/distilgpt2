@@ -23,11 +23,31 @@ const context = ['What is Python?'];
       return text;
     };
 
-
+    const ungzip = (data) =>{
+      return new Response(new Response(data).body.pipeThrough(new DecompressionStream("gzip"))).bytes();
+    };
+    
     const fetchEncoder = async () => {
-      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/encoder${x}.txt`));
-      const data = 'data:text/plain;base64,' + (await Promise.all(chunks)).join('');
-      return _fetch(data);
+
+      const parts = [];
+
+      for (const x of [0, 1, 2, 3, 4, 5]) {
+        const res = await _fetch(`https://patrick-ring-motive.github.io/distilgpt2/encoder${x}.txt`);
+        if (!res.ok) throw new Error(`https://patrick-ring-motive.github.io/distilgpt2/encoder${x}.txt`);
+        const gzData = new Uint8Array(await res.arrayBuffer());
+        const raw = await ungzip(gzData);
+        parts.push(raw);
+      }
+
+      const totalLength = parts.reduce((sum, part) => sum + part.length, 0);
+      const result = new Uint8Array(totalLength);
+      let offset = 0;
+      for (const part of parts) {
+        result.set(part, offset);
+        offset += part.length;
+      }
+
+      return result;
     };
 
     const fetchDecoder = async () => {
