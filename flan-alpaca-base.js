@@ -23,10 +23,10 @@ const context = ['What is Python?'];
       return text;
     };
 
-    const ungzip = (data) =>{
+    const ungzip = (data) => {
       return new Response(new Response(data).body.pipeThrough(new DecompressionStream("gzip"))).bytes();
     };
-    
+
     const fetchEncoder = async () => {
 
       const parts = [];
@@ -46,8 +46,7 @@ const context = ['What is Python?'];
         result.set(part, offset);
         offset += part.length;
       }
-
-      return result;
+      return new Response(result);
     };
 
     const fetchDecoder = async () => {
