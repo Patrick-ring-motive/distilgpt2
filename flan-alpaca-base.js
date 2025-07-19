@@ -18,7 +18,7 @@ const context = ['What is Python?'];
     };
 
     const fetchEncoder = async () => {
-      const chunks = [0, 1, 2, 3].map(x => fetchChunk(`https://patrick-ring-motive.github.io/distilgpt2/encoder_chunk0${x}.txt`));
+      const chunks = [0, 1, 2, 3, 4].map(x => fetchChunk(`https://patrick-ring-motive.github.io/distilgpt2/encoder_chunk0${x}.txt`));
       const bytes = await Promise.all(chunks);
       return new Response(new Response(new Uint8Array((await Promise.all(bytes.flat())).flat())).body.pipeThrough(new DecompressionStream("gzip")));
     };
