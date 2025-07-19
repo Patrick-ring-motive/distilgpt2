@@ -22,6 +22,13 @@ const context = ['What is Python?'];
       const bytes = await Promise.all(chunks);
       return new Response(new Response(new Uint8Array((await Promise.all(bytes.flat())).flat())).body.pipeThrough(new DecompressionStream("gzip")));
     };
+
+    const fetchDecoder = async () => {
+      const chunks = [0, 1, 2, 3, 4, 5].map(x => fetchChunk(`https://patrick-ring-motive.github.io/distilgpt2/decoder_chunk0${x}.txt`));
+      const bytes = await Promise.all(chunks);
+      return new Response(new Response(new Uint8Array((await Promise.all(bytes.flat())).flat())).body.pipeThrough(new DecompressionStream("gzip")));
+    };
+
     globalThis.fetch = async function fetch() {
       if (String(arguments[0]).endsWith('ort-wasm-simd-threaded.jsep.wasm')) {
         const loc = location.href.split('/');
@@ -62,8 +69,8 @@ const context = ['What is Python?'];
   let generator;
   try {
 
-      generator = (await pipeline('text2text-generation', 'Xenova/flan-alpaca-base'));
-  
+    generator = (await pipeline('text2text-generation', 'Xenova/flan-alpaca-base'));
+
 
     // Generate text
 
@@ -88,7 +95,7 @@ const context = ['What is Python?'];
       });
       const output = await generator(context.join(''), { max_length: 32, do_sample: true, top_k: 10, streamer });
       await log(context.join(' '));
-     // await sleep(100);
+      // await sleep(100);
       context.push(output[0].generated_text);
     }
   } catch (e) {
