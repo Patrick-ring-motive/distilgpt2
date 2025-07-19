@@ -25,15 +25,15 @@ const context = ['What is Python?'];
 
 
     const fetchEncoder = async () => {
-      const chunks = [0, 1, 2, 3, 4,5,6,7,8,9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/encoder${x}.txt`));
-      const data = 'data:text/plain;base64,'+(await Promise.all(chunks)).join('');
+      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/encoder${x}.txt`));
+      const data = 'data:text/plain;base64,' + (await Promise.all(chunks)).join('');
       return _fetch(data);
     };
 
     const fetchDecoder = async () => {
-      const chunks = [0, 1, 2, 3, 4, 5].map(x => fetchChunk(`https://patrick-ring-motive.github.io/distilgpt2/decoder_chunk0${x}.txt`));
-      const bytes = await Promise.all(chunks);
-      return new Response(new Response(new Uint8Array((await Promise.all(bytes.flat())).flat())).body.pipeThrough(new DecompressionStream("gzip")));
+      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/decoder${x}.txt`));
+      const data = 'data:text/plain;base64,' + (await Promise.all(chunks)).join('');
+      return _fetch(data);
     };
 
     globalThis.fetch = async function fetch() {
