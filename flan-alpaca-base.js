@@ -56,7 +56,7 @@ const context = ['What is Python?'];
       if (String(arguments[0]).includes('decoder')) {
         const loc = location.href.split('/');
         loc.pop();
-        return new Response((await _fetch(`https://huggingface.co/datasets/Weblet/flan/resolve/main/onnxdecodermodelmergedquantizedonnx.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
+        return await fetchDecoder();
       }
       return _fetch.apply(this, arguments);
     };
