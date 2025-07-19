@@ -19,14 +19,15 @@ myWorker.onmessage = (e) => {
   console.log("Message received from worker");
 };
 
-fetchChunk = async(url) =>{
+const fetchChunk = async (url) => {
   const response = await fetch(url);
   const bytes = await response.bytes();
   return bytes;
 };
 
-fetchEncoder = async() =>{
-  const chunks = [0,1,2,3].map(x=>fetchChunk(`'https://patrick-ring-motive.github.io/distilgpt2/encoder_chunk0${x}.txt'`));
+const fetchEncoder = async () => {
+  const chunks = [0, 1, 2, 3].map(x => fetchChunk(`https://patrick-ring-motive.github.io/distilgpt2/encoder_chunk0${x}.txt`));
   const bytes = await Promise.all(chunks);
-  return new Uint8Array(bytes.flat());
+  return new Response(new Response(new Uint8Array((await Promise.all(bytes.flat())).flat()).body.pipeThrough(new DecompressionStream("gzip"))).body);
 };
+
