@@ -61,21 +61,11 @@ const context = ['What is Python?'];
   // Create a text generation pipeline
   let generator;
   try {
-    if (false && /mobile/i.test(navigator.userAgent)) {
-      console.log("loading mobile model")
-      generator = (await pipeline(
-        "text-generation",
-        "Xenova/distilgpt2",
-      ));
-      log("loaded mobile model");
-    } else {
+
       generator = (await pipeline('text2text-generation', 'Xenova/flan-alpaca-base'));
-    }
+  
 
     // Generate text
-    //const output = await generator("Who are you?", { max_new_tokens: 64, do_sample: true });
-
-
 
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -98,7 +88,7 @@ const context = ['What is Python?'];
       });
       const output = await generator(context.join(''), { max_length: 32, do_sample: true, top_k: 10, streamer });
       await log(context.join(' '));
-      await sleep(100);
+     // await sleep(100);
       context.push(output[0].generated_text);
     }
   } catch (e) {
