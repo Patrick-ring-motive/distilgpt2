@@ -1,3 +1,41 @@
+[Request, Response,Blob].forEach(res => {
+  res.prototype.bytes ??= async function bytes() {
+    return new Uint8Array(await this.arrayBuffer());
+  };
+});
+if (!new Request("https://test.com", { method: "POST", body: "test" }).body) {
+  Object.defineProperty(Request.prototype, "body", {
+    get() {
+      const $this = this;
+      return new ReadableStream({
+        async pull(controller) {
+          controller.enqueue(await $this.bytes());
+          controller.close();
+        },
+      });
+    },
+  });
+}
+ReadableStream.prototype[Symbol.asyncIterator] ??=
+  async function* asyncIterator() {
+    const reader = this?.getReader?.();
+    try {
+      let chunk = await reader.read();
+      while (chunk?.done === false) {
+        yield chunk?.value;
+        chunk = await reader?.read?.();
+      }
+    } finally {
+      reader?.releaseLock?.();
+    }
+  };
+
+globalThis.requestAnimationFrame ??= (fn) => setTimeout(fn, 0);
+globalThis.requestIdleCallback ??= globalThis.requestAnimationFrame;
+
+globalThis.cancelAnimationFrame ??= (id) => clearTimeout(id);
+globalThis.cancelIdleCallback ??= globalThis.cancelAnimationFrame;
+
 const context = ['What is Python?'];
 (async () => {
   //import { pipeline } from "./transformers.js";
@@ -80,7 +118,7 @@ const context = ['What is Python?'];
         return await fetchCoder([0, 1, 2, 3, 4, 5], 'encoder_part_0', '.txt');
       }
       if (String(arguments[0]).includes('decoder')) {
-         return await fetchCoder([0, 1, 2, 3, 4, 5,6], 'decoder_part_0', '.gz');
+        return await fetchCoder([0, 1, 2, 3, 4, 5, 6], 'decoder_part_0', '.gz');
       }
       return _fetch.apply(this, arguments);
     };
