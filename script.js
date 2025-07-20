@@ -12,10 +12,20 @@ window.addEventListener("error", function(e) {
     log("window error " + (x?.message ?? x));
   });
 });
-const myWorker = new Worker("flan-alpaca-base.js");
+const flan = new Worker("flan-alpaca-base.js");
 
-myWorker.onmessage = (e) => {
+flan.ready = new Promise((resolve) => {
+  flan.resolve = resolve;
+});
+
+flan.onmessage = (e) => {
   log(e.data);
-  console.log("Message received from worker");
+  if (e.data === "ready") {
+    flan?.resolve?.(true);
+  };
 };
 
+document.getElementsByTagName('button')?.[0]?.addEventListener?.('click', async () => {
+  await flan.ready;
+  flan.postMessage(document.getElementById('input').value);
+});

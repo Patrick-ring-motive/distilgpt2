@@ -164,16 +164,8 @@ const context = ['What is Python?'];
 
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-
-
-
-
-    // Generate a response
-    if (/mobile/i.test(navigator.userAgent)) {
-      const output = await generator("Once upon a time,", { max_new_tokens: 32, do_sample: true });
-      log(output[0].generated_text.at(-1).content);
-    } else {
-      // Generate text
+    // Generate text
+    const genNext = async (txt) => {
       const streamer = new TextStreamer(generator.tokenizer, {
         skip_prompt: true,
         callback_function: (token) => {
@@ -181,13 +173,18 @@ const context = ['What is Python?'];
           context.push(token);
         }
       });
-      const output = await generator(context.join(''), { max_length: 32, do_sample: true, top_k: 10, streamer });
-      await log(context.join(' '));
-      // await sleep(100);
-      context.push(output[0].generated_text);
-    }
+      const output = await generator(txt, {
+        max_length: 32,
+        do_sample: true,
+        top_k: 10,
+        streamer
+      });
+    };
+    self.onmessage = async (event) => await genNext(event.data);
+    genNext(context.join(' '));
   } catch (e) {
     log(e);
   }
 
+  postMessage('ready');
 })();
