@@ -55,67 +55,61 @@ const context = ['What is Python?'];
       return bytes;
     };
 
+    const cache = {
+      async init() {
+        if (!cache.box) {
+          cache.box = caches.open('chunk-cache');
+        }
+        if (cache.box instanceof Promise) {
+          cache.box = await cache.box;
+        }
+        return cache.box;
+      },
+      async get(key) {
+        await this.init();
+        return (await this.box.match(key))?.clone?.();
+      },
+      async set(key, value) {
+        await this.init();
+        return await this.box.put(key, (await value)?.clone?.());
+      }
+    };
+
     const fetchText = async (url) => {
       const response = await _fetch(url);
       const text = await response.text();
       return text;
     };
 
-    const ungzip = (data) => {
-      return new Response(new Response(data).body.pipeThrough(new DecompressionStream("gzip"))).bytes();
-    };
-
-    const fetchCoder = async (nums, pre, post) => {
-
-      const parts = [];
-
-      for (const x of nums) {
-        const res = await _fetch(`https://patrick-ring-motive.github.io/distilgpt2/${pre}${x}${post}`);
-        if (!res.ok) throw new Error(`https://patrick-ring-motive.github.io/distilgpt2/${pre}${x}${post}`);
-        const gzData = new Uint8Array(await res.arrayBuffer());
-        const raw = await ungzip(gzData);
-        parts.push(raw);
+    const cacheText = async (url) => {
+      const cached = await cache.get(url);
+      if (cached) {
+        return await cached.clone().text();
       }
-
-      const totalLength = parts.reduce((sum, part) => sum + part.length, 0);
-      const result = new Uint8Array(totalLength);
-      let offset = 0;
-      for (const part of parts) {
-        result.set(part, offset);
-        offset += part.length;
-      }
-      return new Response(result);
-    };
-
-    const fetchEncoder = async () => {
-      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/encoder${x}.txt`));
-      const data = 'data:text/plain;base64,' + (await Promise.all(chunks)).join('');
-      return _fetch(data);
-    };
-
-    const fetchDecoder = async () => {
-      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/decoder${x}.txt`));
-      const data = 'data:text/plain;base64,' + (await Promise.all(chunks)).join('');
-      return _fetch(data);
+      const response = await _fetch(url);
+      cache.set(url, response.clone());
+      const text = await response.text();
+      return text;
     };
 
     const decode64 = (b64) => {
       const binary = atob(b64);
       const bytes = new Uint8Array(binary.length);
       const len = binary.length;
-      for (let i = 0; i !== len; i++){
+      for (let i = 0; i !== len; i++) {
         bytes[i] = binary.charCodeAt(i);
       }
       return bytes;
     };
+
     const fetchB64Encoder = async () => {
-      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/encoder${x}.txt`));
+      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`https://patrick-ring-motive.github.io/distilgpt2/encoder${x}.txt`));
       const data = (await Promise.all(chunks)).join('');
       return new Response(decode64(data));
     };
 
     const fetchB64Decoder = async () => {
-      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/decoder${x}.txt`));
+      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`https://patrick-ring-motive.github.io/distilgpt2/decoder${x}.txt`));
       const data = (await Promise.all(chunks)).join('');
       return new Response(decode64(data));
     };
