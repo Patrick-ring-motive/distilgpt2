@@ -118,7 +118,8 @@ const context = ['What is Python?'];
         return await fetchCoder([0, 1, 2, 3, 4, 5], 'encoder_part_0', '.gz');
       }
       if (String(arguments[0]).includes('decoder')) {
-        return await fetchCoder([0, 1, 2, 3, 4, 5, 6], 'decoder_part_0', '.gz');
+       // return await fetchCoder([0, 1, 2, 3, 4, 5, 6], 'decoder_part_0', '.gz');
+        return await fetchDecoder();
       }
       return _fetch.apply(this, arguments);
     };
