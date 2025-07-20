@@ -87,6 +87,12 @@ const context = ['What is Python?'];
       return new Response(result);
     };
 
+    const fetchEncoder = async () => {
+      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/encoder${x}.txt`));
+      const data = 'data:text/plain;base64,' + (await Promise.all(chunks)).join('');
+      return _fetch(data);
+    };
+    
     const fetchDecoder = async () => {
       const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/decoder${x}.txt`));
       const data = 'data:text/plain;base64,' + (await Promise.all(chunks)).join('');
@@ -115,7 +121,8 @@ const context = ['What is Python?'];
         return new Response((await _fetch(`${loc.join('/')}/tokenizerjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
       }
       if (String(arguments[0]).includes('encoder')) {
-        return await fetchCoder([0, 1, 2, 3, 4, 5], 'encoder_part_0', '.gz');
+        //return await fetchCoder([0, 1, 2, 3, 4, 5], 'encoder_part_0', '.gz');
+        return await fetchEncoder();  
       }
       if (String(arguments[0]).includes('decoder')) {
        // return await fetchCoder([0, 1, 2, 3, 4, 5, 6], 'decoder_part_0', '.gz');
