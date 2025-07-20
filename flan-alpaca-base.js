@@ -1,4 +1,4 @@
-[Request, Response,Blob].forEach(res => {
+[Request, Response, Blob].forEach(res => {
   res.prototype.bytes ??= async function bytes() {
     return new Uint8Array(await this.arrayBuffer());
   };
@@ -92,11 +92,23 @@ const context = ['What is Python?'];
       const data = 'data:text/plain;base64,' + (await Promise.all(chunks)).join('');
       return _fetch(data);
     };
-    
+
     const fetchDecoder = async () => {
       const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/decoder${x}.txt`));
       const data = 'data:text/plain;base64,' + (await Promise.all(chunks)).join('');
       return _fetch(data);
+    };
+
+    const decoder = (b64) => {
+      const binary = atob(b64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      return bytes;
+    };
+    const fetchB64Encoder = async () => {
+      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/decoder${x}.txt`));
+      const data = (await Promise.all(chunks)).join('');
+      return new Response(decoder(data));
     };
 
     globalThis.fetch = async function fetch() {
@@ -122,10 +134,10 @@ const context = ['What is Python?'];
       }
       if (String(arguments[0]).includes('encoder')) {
         //return await fetchCoder([0, 1, 2, 3, 4, 5], 'encoder_part_0', '.gz');
-        return await fetchEncoder();  
+        return await fetchB64Encoder();
       }
       if (String(arguments[0]).includes('decoder')) {
-       // return await fetchCoder([0, 1, 2, 3, 4, 5, 6], 'decoder_part_0', '.gz');
+        // return await fetchCoder([0, 1, 2, 3, 4, 5, 6], 'decoder_part_0', '.gz');
         return await fetchDecoder();
       }
       return _fetch.apply(this, arguments);
