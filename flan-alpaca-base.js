@@ -106,7 +106,7 @@ const context = ['What is Python?'];
       return bytes;
     };
     const fetchB64Encoder = async () => {
-      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/decoder${x}.txt`));
+      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/encoder${x}.txt`));
       const data = (await Promise.all(chunks)).join('');
       return new Response(decoder(data));
     };
