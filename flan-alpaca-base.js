@@ -35,7 +35,7 @@ const context = ['What is Python?'];
         const res = await _fetch(`https://patrick-ring-motive.github.io/distilgpt2/${pre}${x}${post}`);
         if (!res.ok) throw new Error(`https://patrick-ring-motive.github.io/distilgpt2/${pre}${x}${post}`);
         const gzData = new Uint8Array(await res.arrayBuffer());
-        const raw = gzData;//await ungzip(gzData);
+        const raw = await ungzip(gzData);
         parts.push(raw);
       }
 
