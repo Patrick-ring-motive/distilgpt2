@@ -55,6 +55,12 @@ const context = ['What is Python?'];
       return bytes;
     };
 
+    const fetchText = async (url) => {
+      const response = await _fetch(url);
+      const text = await response.text();
+      return text;
+    };
+
     const cache = {
       async init() {
         if (!cache.box) {
@@ -75,11 +81,7 @@ const context = ['What is Python?'];
       }
     };
 
-    const fetchText = async (url) => {
-      const response = await _fetch(url);
-      const text = await response.text();
-      return text;
-    };
+
 
     const cacheText = async (url) => {
       const cached = await cache.get(url);
