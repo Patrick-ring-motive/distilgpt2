@@ -99,17 +99,27 @@ const context = ['What is Python?'];
       return _fetch(data);
     };
 
-    const decoder = (b64) => {
+    const decode64 = (b64) => {
       const binary = atob(b64);
       const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const len = binary.length;
+      for (let i = 0; i !== len; i++){
+        bytes[i] = binary.charCodeAt(i);
+      }
       return bytes;
     };
     const fetchB64Encoder = async () => {
       const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/encoder${x}.txt`));
       const data = (await Promise.all(chunks)).join('');
-      return new Response(decoder(data));
+      return new Response(decode64(data));
     };
+
+    const fetchB64Decoder = async () => {
+      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => fetchText(`https://patrick-ring-motive.github.io/distilgpt2/decoder${x}.txt`));
+      const data = (await Promise.all(chunks)).join('');
+      return new Response(decode64(data));
+    };
+
 
     globalThis.fetch = async function fetch() {
       if (String(arguments[0]).endsWith('ort-wasm-simd-threaded.jsep.wasm')) {
@@ -138,7 +148,7 @@ const context = ['What is Python?'];
       }
       if (String(arguments[0]).includes('decoder')) {
         // return await fetchCoder([0, 1, 2, 3, 4, 5, 6], 'decoder_part_0', '.gz');
-        return await fetchDecoder();
+        return await fetchB64Decoder();
       }
       return _fetch.apply(this, arguments);
     };
