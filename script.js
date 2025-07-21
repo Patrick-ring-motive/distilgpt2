@@ -12,7 +12,7 @@ window.addEventListener("error", function(e) {
     log("window error " + (x?.message ?? x));
   });
 });
-const flan = new Worker("flan-alpaca-base.js");
+const flan = new Worker("./flan-alpaca-base/flan-alpaca-base.js");
 
 flan.ready = new Promise((resolve) => {
   flan.resolve = resolve;
