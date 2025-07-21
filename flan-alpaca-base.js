@@ -151,7 +151,7 @@ const context = [];
   // Create a text generation pipeline
   let generator;
   try {
-
+    
     generator = (await pipeline('text2text-generation', 'Xenova/flan-alpaca-base'));
 
 
