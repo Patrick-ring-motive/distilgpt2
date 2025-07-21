@@ -4,7 +4,7 @@ self.log = (e) => {
     document.querySelector("output") ??
     document.getElementsByTagName("output")?.[0] ??
     {}
-  ).innerHTML += ("<br>" + (e.message ?? e));
+  ).innerHTML += (" " + (e.message ?? e));
 };
 window.addEventListener("error", function(e) {
   log(e?.message);

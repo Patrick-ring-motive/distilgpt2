@@ -36,13 +36,8 @@ globalThis.requestIdleCallback ??= globalThis.requestAnimationFrame;
 globalThis.cancelAnimationFrame ??= (id) => clearTimeout(id);
 globalThis.cancelIdleCallback ??= globalThis.cancelAnimationFrame;
 
-const context = ['What is Python?'];
+const context = [];
 (async () => {
-  //import { pipeline } from "./transformers.js";
-  //const { pipeline, TextStreamer } = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.2.1");
-  //import { pipeline } from "https://cdn.jsdelivr.net/npm/@xenova/transformers";
-
-
 
   const { pipeline, TextStreamer } = await import('./transformers.js');
   globalThis.pipeline = pipeline;
@@ -181,7 +176,6 @@ const context = ['What is Python?'];
       });
     };
     self.onmessage = async (event) => await genNext(event.data);
-    genNext(context.join(' '));
   } catch (e) {
     log(e);
   }
