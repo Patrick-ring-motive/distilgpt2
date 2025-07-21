@@ -81,12 +81,12 @@ const context = [];
       async matchAll(filter) {
         filter ??= () => true;
         await this.init();
-        return [...(await this.box.matchAll())].filter(x => filter(x.url));
+        return [...(await this.box.matchAll())].filter(x => filter(x.url??x));
       },
       async keys(filter) {
         filter ??= () => true;
         await this.init();
-        return [...(await this.box.keys())].filter(x => filter(x.url));
+        return [...(await this.box.keys())].filter(x => filter(x.url??x));
       },
       async deleteAll(filter) {
         filter ??= () => true;
