@@ -39,7 +39,7 @@ globalThis.cancelIdleCallback ??= globalThis.cancelAnimationFrame;
 const context = [];
 (async () => {
 
-  const { pipeline, TextStreamer } = await import('./transformers.js');
+  const { pipeline, TextStreamer } = await import('../transformers.js');
   globalThis.pipeline = pipeline;
   globalThis.TextStreamer = TextStreamer;
   (() => {
