@@ -73,6 +73,25 @@ const context = [];
       async set(key, value) {
         await this.init();
         return await this.box.put(key, (await value)?.clone?.());
+      },
+      async delete(key) {
+        await this.init();
+        return await this.box.delete(key);
+      },
+      async matchAll(filter) {
+        filter ??= () => true;
+        await this.init();
+        return [...(await this.box.matchAll())].filter(x => filter(x.url));
+      },
+      async keys(filter) {
+        filter ??= () => true;
+        await this.init();
+        return [...(await this.box.keys())].filter(x => filter(x.url));
+      },
+      async deleteAll(filter) {
+        filter ??= () => true;
+        await this.init();
+        return await Promise.all((await this.keys(filter)).map(x => this.delete(x.url ?? x)));
       }
     };
 
@@ -106,13 +125,17 @@ const context = [];
     const fetchB64Encoder = async () => {
       const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`${root}/encoder${x}.txt`));
       const data = (await Promise.all(chunks)).join('');
-      return new Response(decode64(data));
+      const res = new Response(decode64(data));
+      cache.deleteAll(x => x.includes('encoder'));
+      return res;
     };
 
     const fetchB64Decoder = async () => {
       const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`${root}/decoder${x}.txt`));
       const data = (await Promise.all(chunks)).join('');
-      return new Response(decode64(data));
+      const res = new Response(decode64(data));
+      cache.deleteAll(x => x.includes('decoder'));
+      return res;
     };
 
 
@@ -130,11 +153,9 @@ const context = [];
         return new Response((await _fetch(`${root}/tokenizerjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
       }
       if (String(arguments[0]).includes('encoder')) {
-        //return await fetchCoder([0, 1, 2, 3, 4, 5], 'encoder_part_0', '.gz');
         return await fetchB64Encoder();
       }
       if (String(arguments[0]).includes('decoder')) {
-        // return await fetchCoder([0, 1, 2, 3, 4, 5, 6], 'decoder_part_0', '.gz');
         return await fetchB64Decoder();
       }
       return _fetch.apply(this, arguments);
