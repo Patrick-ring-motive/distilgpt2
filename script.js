@@ -1,5 +1,9 @@
 self.log = (e) => {
-  console.log(e);
+  if (/error/i.test(e?.constructor?.name)) {
+    console.warn(e);
+  } else {
+    console.log(e);
+  }
   (
     document.querySelector("output") ??
     document.getElementsByTagName("output")?.[0] ??
