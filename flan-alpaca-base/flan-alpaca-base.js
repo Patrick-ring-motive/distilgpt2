@@ -123,7 +123,7 @@ const context = [];
     const root = loc.join('/');
 
     const fetchB64Encoder = async () => {
-      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`${root}/encoder${x}.txt`));
+      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`${root}/code_chunks/encoder${x}.txt`));
       const data = (await Promise.all(chunks)).join('');
       const res = new Response(decode64(data));
       cache.deleteAll(x => x.includes('encoder'));
@@ -131,7 +131,7 @@ const context = [];
     };
 
     const fetchB64Decoder = async () => {
-      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`${root}/decoder${x}.txt`));
+      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`${root}/code_chunks/decoder${x}.txt`));
       const data = (await Promise.all(chunks)).join('');
       const res = new Response(decode64(data));
       cache.deleteAll(x => x.includes('decoder'));
