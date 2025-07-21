@@ -1,3 +1,4 @@
+const context = [];
 self.log = (e) => {
   if (/error/i.test(e?.constructor?.name)) {
     console.warn(e);
@@ -9,6 +10,7 @@ self.log = (e) => {
     document.getElementsByTagName("output")?.[0] ??
     {}
   ).innerHTML += (" " + (e.message ?? e));
+  context.push(e.message ?? e);
 };
 window.addEventListener("error", function(e) {
   log(e?.message);
@@ -31,11 +33,13 @@ flan.onmessage = (e) => {
 
 document.getElementsByTagName('button')?.[0]?.addEventListener?.('click', async () => {
   await flan.ready;
-  flan.postMessage(document.getElementById('input').value);
+  context.push(document.getElementById('input').value);
+  flan.postMessage(context.join(' ').trim());
 });
 document.getElementById('input')?.addEventListener?.('keydown', async (event) => {
   if (event.key === 'Enter') {
     await flan.ready;
-    flan.postMessage(document.getElementById('input').value);
+    context.push(document.getElementById('input').value);
+    flan.postMessage(context.join(' ').trim());
   }
 });
