@@ -102,10 +102,11 @@ const context = [];
       if (cached) {
         return await cached.clone().text();
       }
-      const response = await _fetch(url);
+      let response = await _fetch(url);
       if (!response.ok){
         throw new Error(`Failed to fetch ${url} ${response.statusText}`);
       }
+      response = new Response(response.body.pipeThrough(new DecompressionStream("gzip")));
       cache.set(url, response.clone());
       const text = await response.text();
       return text;
@@ -126,7 +127,7 @@ const context = [];
     const root = loc.join('/');
 
     const fetchB64Encoder = async () => {
-      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`${root}/code_chunks/encoder${x}.txt`));
+      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`${root}/code_chunks/encoder${x}.txt.gz`));
       const data = (await Promise.all(chunks)).join('');
       const res = new Response(decode64(data));
       cache.deleteAll(x => x.includes('encoder'));
@@ -134,7 +135,7 @@ const context = [];
     };
 
     const fetchB64Decoder = async () => {
-      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`${root}/code_chunks/decoder${x}.txt`));
+      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`${root}/code_chunks/decoder${x}.txt.gz`));
       const data = (await Promise.all(chunks)).join('');
       const res = new Response(decode64(data));
       cache.deleteAll(x => x.includes('decoder'));
