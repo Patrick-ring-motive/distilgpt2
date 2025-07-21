@@ -15,7 +15,7 @@
   <input type="text" id="input"></input><button>Send</button>
   <output></output>
   <script type="module">
-    import { pipeline } from "@huggingface/transformers";
+    const { pipeline, TextStreamer } = await import('./transformers.js');
 
     // Create a text generation pipeline
     const generator = await pipeline(
