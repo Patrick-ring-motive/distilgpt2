@@ -103,6 +103,9 @@ const context = [];
         return await cached.clone().text();
       }
       const response = await _fetch(url);
+      if (!response.ok){
+        throw new Error(`Failed to fetch ${url} ${response.statusText}`);
+      }
       cache.set(url, response.clone());
       const text = await response.text();
       return text;
