@@ -29,3 +29,9 @@ document.getElementsByTagName('button')?.[0]?.addEventListener?.('click', async 
   await flan.ready;
   flan.postMessage(document.getElementById('input').value);
 });
+document.getElementById('input')?.addEventListener?.('keydown', async (event) => {
+  if (event.key === 'Enter') {
+    await flan.ready;
+    flan.postMessage(document.getElementById('input').value);
+  }
+});
