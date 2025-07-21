@@ -42,6 +42,7 @@ const context = [];
   const { pipeline, TextStreamer } = await import('../transformers.js');
   globalThis.pipeline = pipeline;
   globalThis.TextStreamer = TextStreamer;
+  console.log(TextStreamer);
   (() => {
     const _fetch = globalThis.fetch;
     const fetchChunk = async (url) => {
