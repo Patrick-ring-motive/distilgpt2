@@ -99,14 +99,18 @@ const context = [];
       return bytes;
     };
 
+    const loc = location.href.split('/');
+    loc.pop();
+    const root = loc.join('/');
+
     const fetchB64Encoder = async () => {
-      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`https://patrick-ring-motive.github.io/distilgpt2/encoder${x}.txt`));
+      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`${root}/encoder${x}.txt`));
       const data = (await Promise.all(chunks)).join('');
       return new Response(decode64(data));
     };
 
     const fetchB64Decoder = async () => {
-      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`https://patrick-ring-motive.github.io/distilgpt2/decoder${x}.txt`));
+      const chunks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => cacheText(`${root}/decoder${x}.txt`));
       const data = (await Promise.all(chunks)).join('');
       return new Response(decode64(data));
     };
@@ -114,24 +118,16 @@ const context = [];
 
     globalThis.fetch = async function fetch() {
       if (String(arguments[0]).endsWith('ort-wasm-simd-threaded.jsep.wasm')) {
-        const loc = location.href.split('/');
-        loc.pop();
-        return new Response((await _fetch(`${loc.join('/')}/ort-wasm-simd-threaded.jsep.wasm.gz`)).body.pipeThrough(new DecompressionStream("gzip")), { headers: { "content-type": "application/wasm" } });
+        return new Response((await _fetch(`${root}/ort-wasm-simd-threaded.jsep.wasm.gz`)).body.pipeThrough(new DecompressionStream("gzip")), { headers: { "content-type": "application/wasm" } });
       }
       if (String(arguments[0]).endsWith('tokenizer_config.json')) {
-        const loc = location.href.split('/');
-        loc.pop();
-        return new Response((await _fetch(`${loc.join('/')}/tokenizerconfigjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
+        return new Response((await _fetch(`${root}/tokenizerconfigjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
       }
       if (String(arguments[0]).endsWith('config.json')) {
-        const loc = location.href.split('/');
-        loc.pop();
-        return new Response((await _fetch(`${loc.join('/')}/configjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
+        return new Response((await _fetch(`${root}/configjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
       }
       if (String(arguments[0]).endsWith('tokenizer.json')) {
-        const loc = location.href.split('/');
-        loc.pop();
-        return new Response((await _fetch(`${loc.join('/')}/tokenizerjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
+        return new Response((await _fetch(`${root}/tokenizerjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
       }
       if (String(arguments[0]).includes('encoder')) {
         //return await fetchCoder([0, 1, 2, 3, 4, 5], 'encoder_part_0', '.gz');
@@ -151,7 +147,7 @@ const context = [];
   // Create a text generation pipeline
   let generator;
   try {
-    
+
     generator = (await pipeline('text2text-generation', 'Xenova/flan-alpaca-base'));
 
 
