@@ -1,3 +1,8 @@
+const Q = fn => {
+  try {
+    return fn?.();
+  } catch { }
+};
 [Request, Response, Blob].forEach(res => {
   res.prototype.bytes ??= async function bytes() {
     return new Uint8Array(await this.arrayBuffer());
@@ -16,20 +21,21 @@ if (!new Request("https://test.com", { method: "POST", body: "test" }).body) {
     },
   });
 }
-ReadableStream.prototype[Symbol.asyncIterator] ??=
-  async function* asyncIterator() {
-    const reader = this?.getReader?.();
-    try {
-      let chunk = await reader.read();
-      while (chunk?.done === false) {
-        yield chunk?.value;
-        chunk = await reader?.read?.();
-      }
-    } finally {
-      reader?.releaseLock?.();
-    }
+ReadableStreamDefaultReader.prototype.next ??= ReadableStreamDefaultReader.prototype.read;
+ReadableStreamDefaultReader.prototype[Symbol.asyncIterator] ??= function asyncIterator() {
+  return this;
+};
+ReadableStreamDefaultReader.prototype['return'] ??= function release(reason) {
+  this.cancel?.(reason)
+  this.releaseLock?.()
+  return { done: true };
+};
+(() => {
+  const $reader = Symbol("*reader");
+  ReadableStream.prototype[Symbol.asyncIterator] ??= function asyncIterator() {
+    return this[$reader] ??= this?.getReader?.();
   };
-
+})();
 globalThis.requestAnimationFrame ??= (fn) => setTimeout(fn, 0);
 globalThis.requestIdleCallback ??= globalThis.requestAnimationFrame;
 
@@ -81,12 +87,12 @@ const context = [];
       async matchAll(filter) {
         filter ??= () => true;
         await this.init();
-        return [...(await this.box.matchAll())].filter(x => filter(x.url??x));
+        return [...(await this.box.matchAll())].filter(x => filter(x.url ?? x));
       },
       async keys(filter) {
         filter ??= () => true;
         await this.init();
-        return [...(await this.box.keys())].filter(x => filter(x.url??x));
+        return [...(await this.box.keys())].filter(x => filter(x.url ?? x));
       },
       async deleteAll(filter) {
         filter ??= () => true;
@@ -103,7 +109,7 @@ const context = [];
         return await cached.clone().text();
       }
       let response = await _fetch(url);
-      if (!response.ok){
+      if (!response.ok) {
         throw new Error(`Failed to fetch ${url} ${response.statusText}`);
       }
       response = new Response(response.body.pipeThrough(new DecompressionStream("gzip")));
