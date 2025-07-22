@@ -32,7 +32,7 @@ ReadableStreamDefaultReader.prototype['return'] ??= function release(reason) {
 };
 (() => {
   const $reader = Symbol("*reader");
-  ReadableStream.prototype[Symbol.asyncIterator] = function asyncIterator() {
+  ReadableStream.prototype[Symbol.asyncIterator] ??= function asyncIterator() {
     return this[$reader] ??= this?.getReader?.();
   };
 })();
