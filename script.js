@@ -23,7 +23,7 @@ flan.ready = new Promise((resolve) => {
   flan.resolve = resolve;
 });
 
-flan.onmessage = () => {
+flan.onmessage = (() => {
   let ready = false;
   return (e) => {
     log(e.data);
@@ -33,7 +33,7 @@ flan.onmessage = () => {
     };
     context.push(e.data)
   };
-};
+})();
 document.getElementsByTagName('button')?.[0]?.addEventListener?.('click', async () => {
   await flan.ready;
   context.push(document.getElementById('input').value);
