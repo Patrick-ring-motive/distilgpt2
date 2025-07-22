@@ -6,22 +6,7 @@
   <meta name="viewport" content="width=device-width">
   <title>WebLLM Anywhere</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
-  <script>
-    ReadableStream.prototype[Symbol.asyncIterator] ??=
-    async function* asyncIterator() {
-      const reader = this?.getReader?.();
-      try {
-        let chunk = await reader.read();
-        while (chunk?.done === false) {
-          yield chunk?.value;
-          chunk = await reader?.read?.();
-        }
-      } finally {
-        reader?.releaseLock?.();
-      }
-    };
-    
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/javaxscript/common-fills.js"></script>
 </head>
 
 <body>

@@ -1,50 +1,8 @@
-const Q = fn => {
-  try {
-    return fn?.();
-  } catch { }
-};
-[Request, Response, Blob].forEach(res => {
-  res.prototype.bytes ??= async function bytes() {
-    return new Uint8Array(await this.arrayBuffer());
-  };
-});
-if (!new Request("https://test.com", { method: "POST", body: "test" }).body) {
-  Object.defineProperty(Request.prototype, "body", {
-    get() {
-      const $this = this;
-      return new ReadableStream({
-        async pull(controller) {
-          controller.enqueue(await $this.bytes());
-          controller.close();
-        },
-      });
-    },
-  });
-}
-ReadableStreamDefaultReader.prototype.next ??= ReadableStreamDefaultReader.prototype.read;
-ReadableStreamDefaultReader.prototype[Symbol.asyncIterator] ??= function asyncIterator() {
-  return this;
-};
-ReadableStreamDefaultReader.prototype['return'] ??= function release(reason) {
-  this.cancel?.(reason)
-  this.releaseLock?.()
-  return { done: true };
-};
-(() => {
-  const $reader = Symbol("*reader");
-  ReadableStream.prototype[Symbol.asyncIterator] = function asyncIterator() {
-    return this[$reader] ??= this?.getReader?.();
-  };
-})();
-globalThis.requestAnimationFrame ??= (fn) => setTimeout(fn, 0);
-globalThis.requestIdleCallback ??= globalThis.requestAnimationFrame;
 
-globalThis.cancelAnimationFrame ??= (id) => clearTimeout(id);
-globalThis.cancelIdleCallback ??= globalThis.cancelAnimationFrame;
 
 const context = [];
 (async () => {
-
+  await import('https://cdn.jsdelivr.net/npm/javaxscript/common-fills.js');
   const { pipeline, TextStreamer } = await import('../transformers.js');
   globalThis.pipeline = pipeline;
   globalThis.TextStreamer = TextStreamer;
