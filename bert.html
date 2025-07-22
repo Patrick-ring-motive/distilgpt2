@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <log></log>
+  <script type="module">
+    await import("https://cdn.jsdelivr.net/npm/@tensorflow/tfjs");
+    await import("https://cdn.jsdelivr.net/npm/@tensorflow-models/qna");
+    const stringify = x =>{
+      try{
+        return JSON.stringify(x);
+      }catch{
+        return String(x);
+      }
+    };
+  self.log = (...x) =>{
+    document.getElementsByTagName('log')[0].innerHTML += x.join(' ') + '<br>';
+  };
+   const context = [];
+    const passage = 'The capital of France is Paris.';
+
+const question = 'What is the capital of France?';
+
+    context.push(passage);
+
+    await tf.setBackend('webgl');     
+    await tf.ready();
+  const model = await  qna.load();
+    log(context.join(' ').trim().slice(0,-1).split(/[\.\?\!]/).pop());
+  const answers = await    model.findAnswers(question,context.join(' '));
+    context.push(question);
+    log(stringify(answers));
+    let answer = stringify(answers);
+    let bestScore = 0;
+    for(const a of answers){
+      const score = a.text.length * a.score;
+      if(score > bestScore){
+        bestScore = score;
+        answer = a.text;
+      }
+    }
+  log(stringify(answer));
+  </script>
+</body>
+
+</html>
