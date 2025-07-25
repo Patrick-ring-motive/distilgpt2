@@ -154,8 +154,8 @@ const context = [];
         }
       });
       const output = await generator(txt, {
-        max_length: 32,
-        do_sample: true,
+        max_length: 32+String(txt).split(' ').length,
+        do_sample: false,
         top_k: 10,
         streamer
       });
