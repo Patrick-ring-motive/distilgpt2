@@ -11,6 +11,19 @@ self.log = (e) => {
     {}
   ).innerHTML += (" " + (e.message ?? e));
 };
+self.write = (e) =>{
+  if (/error/i.test(e?.constructor?.name)) {
+    console.warn(e);
+  } else {
+    console.log(e);
+  }
+  const output = (
+    document.querySelector("output") ??
+    document.getElementsByTagName("output")?.[0] ??
+    {}
+  );
+    .innerHTML += (" " + (e.message ?? e));
+};
 window.addEventListener("error", function(e) {
   log(e?.message);
   [...arguments].forEach((x) => {
