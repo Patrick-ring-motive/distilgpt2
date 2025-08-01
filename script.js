@@ -11,18 +11,13 @@ self.log = (e) => {
     {}
   ).innerHTML += (" " + (e.message ?? e));
 };
-self.write = (e) =>{
-  if (/error/i.test(e?.constructor?.name)) {
-    console.warn(e);
-  } else {
-    console.log(e);
-  }
+self.write = () => {
   const output = (
     document.querySelector("output") ??
     document.getElementsByTagName("output")?.[0] ??
     {}
   );
-    .innerHTML += (" " + (e.message ?? e));
+  output.innerHTML = context.join(' ');
 };
 window.addEventListener("error", function(e) {
   log(e?.message);
@@ -39,12 +34,12 @@ flan.ready = new Promise((resolve) => {
 flan.onmessage = (() => {
   let ready = false;
   return (e) => {
-    log(e.data);
     if (e.data === "ready" && !ready) {
       ready = true;
       return flan?.resolve?.(true);
     };
     context.push(e.data)
+    write();
   };
 })();
 document.getElementsByTagName('button')?.[0]?.addEventListener?.('click', async () => {
