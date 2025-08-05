@@ -1,4 +1,5 @@
-const context = [];
+let context = [];
+
 self.log = (e) => {
   if (/error/i.test(e?.constructor?.name)) {
     console.warn(e);
@@ -30,8 +31,12 @@ const flan = new Worker("./flan-alpaca-base/flan-alpaca-base.js");
 flan.ready = new Promise((resolve) => {
   flan.resolve = resolve;
 });
-
+let justSent = true;
 flan.onmessage = (() => {
+  if (justSent) {
+    justSent = false;
+    context = [];
+  }
   let ready = false;
   return (e) => {
     if (e.data === "ready" && !ready) {
@@ -42,6 +47,7 @@ flan.onmessage = (() => {
     write();
   };
 })();
+
 document.getElementsByTagName('button')?.[0]?.addEventListener?.('click', async () => {
   await flan.ready;
   context.push(document.getElementById('input').value);
@@ -51,6 +57,7 @@ document.getElementById('input')?.addEventListener?.('keydown', async (event) =>
   if (event.key === 'Enter') {
     await flan.ready;
     context.push(document.getElementById('input').value);
-    flan.postMessage(context.join(' ').trim());
+    flan.postMessage(document.getElementById('input').value);
+    justSent = true;
   }
 });
