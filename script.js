@@ -1,3 +1,5 @@
+import { log_softmax } from "./transformers";
+
 let context = [];
 
 self.log = (e) => {
@@ -41,6 +43,7 @@ flan.onmessage = (() => {
   return (e) => {
     if (e.data === "ready" && !ready) {
       ready = true;
+      log('|ready|');
       return flan?.resolve?.(true);
     };
     context.push(e.data)
