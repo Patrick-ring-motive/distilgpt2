@@ -154,13 +154,16 @@ const context = [];
         }
       });
       const output = await generator(txt, {
-        max_length: 32+String(txt).split(' ').length,
+        max_length: 32 + String(txt).split(' ').length,
         do_sample: false,
         top_k: 10,
         streamer
       });
     };
-    self.onmessage = async (event) => await genNext(event.data);
+    self.onmessage = async (event) => {
+      context.push(event.data);
+      await genNext(context.join(' '));
+    };
   } catch (e) {
     log(e);
   }
