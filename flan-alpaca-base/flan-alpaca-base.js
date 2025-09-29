@@ -184,6 +184,7 @@ const context = [];
   } catch (e) {
     log(e);
   }
-
+  await genNext('initialize');
+  context.pop();
   postMessage('ready');
 })();
