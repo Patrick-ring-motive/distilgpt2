@@ -51,7 +51,7 @@ let justSent = true;
 flan.onmessage = (() => {
   if (justSent) {
     justSent = false;
-    context = [];
+   // context = [];
   }
   let ready = false;
   return (e) => {
