@@ -9,6 +9,7 @@ function textDedup(arr){
             }
         }
     }
+    return arr;
 }
 
 let context = [];
