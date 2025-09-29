@@ -165,6 +165,7 @@ const context = [];
       const streamer = new TextStreamer(generator.tokenizer, {
         skip_prompt: true,
         callback_function: (token) => {
+          console.log(token);
           log(token);
           context.push(token);
         }
