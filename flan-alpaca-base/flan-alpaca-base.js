@@ -151,6 +151,7 @@ const context = [];
 
   // Create a text generation pipeline
   let generator;
+    
   try {
 
     generator = (await pipeline('text2text-generation', 'Xenova/flan-alpaca-base'));
@@ -181,10 +182,11 @@ const context = [];
       context.push(event.data);
       await genNext(textDedup(context.filter(x=>x)).join(' ')+'?');
     };
+    await genNext('initialize');
+    context.pop();
   } catch (e) {
     log(e);
   }
-  await genNext('initialize');
-  context.pop();
+
   postMessage('ready');
 })();
