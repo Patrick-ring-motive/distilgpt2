@@ -10,6 +10,7 @@ function textDedup(arr){
             }
         }
     }
+    return arr;
 }
 
 
