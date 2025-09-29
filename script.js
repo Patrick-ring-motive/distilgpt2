@@ -3,9 +3,11 @@
 function textDedup(arr){
     for(let i = 0; i < arr.length; i++){
         for(let x = i+1; x < arr.length;x++){
-            if(arr.slice(i,x).join('') === arr.slice(x,x+(x-i)).join('')){
-                arr.splice(i,x);
-                return arr;
+            for(let o = x-i;o>2;o--){
+                if(arr.slice(i,i+o).join('') == arr.slice(x,x+o).join('')){
+                    arr.splice(x,o);
+                    return arr;
+                }
             }
         }
     }
@@ -32,7 +34,7 @@ self.write = () => {
     document.getElementsByTagName("output")?.[0] ??
     {}
   );
-  output.innerHTML = textDedup(context).join(' ');
+  output.innerHTML = textDedup(context.filter(x=>x)).join(' ');
 };
 window.addEventListener("error", function(e) {
   log(e?.message);
@@ -59,7 +61,7 @@ flan.onmessage = (() => {
       return flan?.resolve?.(true);
     };
     context.push(e.data);
-    textDedup(context);
+    textDedup(context.filter(x=>x));
     write();
   };
 })();
@@ -67,12 +69,12 @@ flan.onmessage = (() => {
 document.getElementsByTagName('button')?.[0]?.addEventListener?.('click', async () => {
   await flan.ready;
   context.push(document.getElementById('input').value);
-  flan.postMessage(textDedup(context).join(' ').trim());
+  flan.postMessage(textDedup(context.filter(x=>x)).join(' ').trim());
 });
 document.getElementById('input')?.addEventListener?.('keydown', async (event) => {
   if (event.key === 'Enter') {
     await flan.ready;
-    textDedup(context).push(document.getElementById('input').value);
+    textDedup(context.filter(x=>x)).push(document.getElementById('input').value);
     flan.postMessage(document.getElementById('input').value);
     justSent = true;
   }
