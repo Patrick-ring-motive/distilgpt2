@@ -179,7 +179,7 @@ const context = [];
     };
     self.onmessage = async (event) => {
       context.push(event.data);
-      await genNext(textDedup(context.filter(x=>x)).join(' '));
+      await genNext(textDedup(context.filter(x=>x)).join(' ')+'?');
     };
   } catch (e) {
     log(e);
