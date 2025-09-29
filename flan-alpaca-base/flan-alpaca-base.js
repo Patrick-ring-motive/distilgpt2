@@ -4,7 +4,7 @@
 function textDedup(arr){
     for(let i = 0; i < arr.length; i++){
         for(let x = i+1; x < arr.length;x++){
-            for(let o = x-i;o>0;o--){
+            for(let o = x-i;o>1;o--){
                 if(arr.slice(i,i+o).join('') == arr.slice(x,x+o).join('')){
                     arr.splice(x,o);
                     return textDedup(arr);
