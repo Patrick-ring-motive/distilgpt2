@@ -1,4 +1,17 @@
 
+//text dedup
+
+function textDedup(arr){
+    for(let i = 0; i < arr.length; i++){
+        for(let x = i+1; x < arr.length;x++){
+            if(arr.slice(i,x).join('') === arr.slice(x,x+(x-i)).join('')){
+                arr.splice(i,x);
+                return arr;
+            }
+        }
+    }
+}
+
 
 const context = [];
 (async () => {
@@ -162,7 +175,7 @@ const context = [];
     };
     self.onmessage = async (event) => {
       context.push(event.data);
-      await genNext(context.join(' '));
+      await genNext(textDedup(context).join(' '));
     };
   } catch (e) {
     log(e);
