@@ -164,7 +164,7 @@ const context = [];
                             initializing.resolve();
                         }
                         await generating?.resolve?.();
-                        console.log(context);
+                        console.log('worker context',context);
                     }
                 }
             });
