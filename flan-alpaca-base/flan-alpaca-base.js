@@ -139,7 +139,7 @@ const context = [];
     })();
 
     // Create a text generation pipeline
-    let generator, generating;
+    let generator, generating, initialized;
     const initializing = Promise.withResolvers();
     self.respond = async (msg) => {
         await initializing.promise;
@@ -158,8 +158,12 @@ const context = [];
                     respond(token);
                     context.push(token);
                     if (String(token).trim().endsWith('</s>')) {
+                        if(!initialized){
+                            [context ?? {}].length = 0;
+                            initialized = true;
+                            initializing.resolve();
+                        }
                         await generating?.resolve?.();
-                        initializing.resolve();
                         console.log(context);
                     }
                 }
