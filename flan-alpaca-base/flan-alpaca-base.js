@@ -142,7 +142,7 @@ const context = [];
     let generator, generating, initialized;
     const initializing = Promise.withResolvers();
     self.respond = async (msg) => {
-        await initializing.promise;
+       // await initializing.promise;
         self.postMessage(msg);
     };
     try {
