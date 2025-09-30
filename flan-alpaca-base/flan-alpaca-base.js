@@ -13,6 +13,13 @@ function textDedup(arr) {
     return arr;
 }
 const context = [];
+const contextPush = txt =>{
+    const tokens = textDedup(String(txt).replaceAll('</s>','').split(/\s+/).map(x=>x));
+    for(const token of tokens){
+        context.push(token);
+    }
+    textDedup(context);
+};
 (async () => {
     await import('https://cdn.jsdelivr.net/npm/javaxscript/common-fills.js');
     const {
@@ -156,7 +163,7 @@ const context = [];
                 callback_function: async (token) => {
                     console.log(token);
                     if(initialized)respond(token);
-                    context.push(token);
+                    contextPush(token);
                     if (String(token).trim().endsWith('</s>')) {
                         if(!initialized){
                             (context ?? {}).length = 0;
@@ -178,12 +185,11 @@ const context = [];
         self.onmessage = async (event) => {
             await initializing.promise;
             await generating?.promise;
-            context.push(event.data);
+            contextPush(event.data);
             generating = Promise.withResolvers();
             await genNext(textDedup(context.filter(x => x)).join(' ') + '?');
         };
         await genNext('');
-        context.pop();
     } catch (e) {
         respond(e?.message ?? e);
     }
