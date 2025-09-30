@@ -170,7 +170,10 @@ const contextPush = txt =>{
         const genNext = async (txt) => {
             const streamer = new TextStreamer(generator.tokenizer, {
                 skip_prompt: true,
-                callback_function: async (token) => {
+                callback_function: async (token,...args) => {
+                    if(args?.length){
+                        console.log(...args);
+                    }
                     console.log(token);
                     if(initialized)respond(token);
                     contextPush(token);
