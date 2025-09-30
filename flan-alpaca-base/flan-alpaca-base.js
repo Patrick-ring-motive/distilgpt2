@@ -155,7 +155,7 @@ const context = [];
                 skip_prompt: true,
                 callback_function: async (token) => {
                     console.log(token);
-                    respond(token);
+                    if(initialized)respond(token);
                     context.push(token);
                     if (String(token).trim().endsWith('</s>')) {
                         if(!initialized){
