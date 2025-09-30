@@ -182,7 +182,7 @@ const context = [];
       context.push(event.data);
       await genNext(textDedup(context.filter(x=>x)).join(' ')+'?');
     };
-    await genNext('initialize');
+    await genNext('');
     context.pop();
   } catch (e) {
     log(e);
