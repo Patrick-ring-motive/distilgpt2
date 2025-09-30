@@ -159,7 +159,7 @@ const context = [];
                     context.push(token);
                     if (String(token).trim().endsWith('</s>')) {
                         if(!initialized){
-                            [context ?? {}].length = 0;
+                            (context ?? {}).length = 0;
                             initialized = true;
                             initializing.resolve();
                         }
