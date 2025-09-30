@@ -13,6 +13,13 @@ function textDedup(arr) {
     return arr;
 }
 let context = [];
+const contextPush = txt =>{
+    const tokens = textDedup(String(txt).replaceAll('</s>','').split(/\s+/).map(x=>x));
+    for(const token of tokens){
+        context.push(token);
+    }
+    textDedup(context);
+};
 self.log = (e) => {
     if (/error/i.test(e?.constructor?.name)) {
         console.warn(e);
@@ -49,7 +56,7 @@ flan.onmessage = (() => {
             log('|ready|');
             return flan?.resolve?.(true);
         };
-        context.push(e.data);
+        contextPush(e.data);
         textDedup(context.filter(x => x));
         write();
     };
@@ -57,7 +64,7 @@ flan.onmessage = (() => {
 document.getElementsByTagName('button')?.[0]?.addEventListener?.('click', async () => {
     (document.querySelector('waiting')?.style ?? {}).display = 'block';
     await flan.ready;
-    context.push(document.getElementById('input').value);
+    contextPush(document.getElementById('input').value);
     flan.postMessage(textDedup(context.filter(x => x)).join(' ').trim());
 });
 document.getElementById('input')?.addEventListener?.('keydown', async (event) => {
