@@ -141,7 +141,7 @@ const context = [];
     // Create a text generation pipeline
     let generator, generating;
     const initializing = Promise.withResolvers();
-    self.respond = (msg) => {
+    self.respond = async (msg) => {
         await initializing.promise;
         self.postMessage(msg);
     };
