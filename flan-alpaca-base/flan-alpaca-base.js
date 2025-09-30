@@ -199,7 +199,7 @@ const contextPush = txt =>{
             generating = Promise.withResolvers();
             await genNext(textDedup(context.filter(x => x)).join(' ') + '?');
         };
-        await genNext('');
+       initializing.resolve();// await genNext('');
     } catch (e) {
         respond(e?.message ?? e);
     }
