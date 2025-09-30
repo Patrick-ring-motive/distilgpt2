@@ -7,7 +7,7 @@ const stringify = x =>{
 };
 const unquote = x => String(x).replace(/^["'`\s]+|["'`\s]+$/g,'');
 const toString = x =>unquote(x?.join?.('') || stringify(x));
-const textEquals=(x,y)=>toString(x).toLowerCase() == toString(y).toLowerCase();
+const textEquals=(x,y)=>toString(x).toLowerCase().replace(/[^a-z0-9]/g,'') == toString(y).toLowerCase().replace(/[^a-z0-9]/g,'');
 
 function textDedup(arr) {
     for (let i = 0; i < arr.length; i++) {
