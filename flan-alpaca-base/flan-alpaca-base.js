@@ -158,6 +158,7 @@ const contextPush = txt =>{
     // Create a text generation pipeline
     let generator, generating, initialized;
     const initializing = Promise.withResolvers();
+    setTimeout(()=>initializing?.resolve?.(),10000);
     self.respond = async (msg) => {
         await initializing.promise;
         self.postMessage(msg);
@@ -200,6 +201,7 @@ const contextPush = txt =>{
             await generating?.promise;
             contextPush(event.data);
             generating = Promise.withResolvers();
+            setTimeout(()=>initializing?.resolve?.(),10000);
             await genNext(textDedup(context.filter(x => x)).join(' ') + '?');
         };
        initialized = true;
