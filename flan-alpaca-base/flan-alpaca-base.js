@@ -197,11 +197,11 @@ const contextPush = txt =>{
             });
         };
         self.onmessage = async (event) => {
-            await initializing.promise;
+            initialized || await initializing.promise;
             await generating?.promise;
             contextPush(event.data);
             generating = Promise.withResolvers();
-            setTimeout(()=>initializing?.resolve?.(),10000);
+            setTimeout(()=>generating?.resolve?.(),10000);
             await genNext(textDedup(context.filter(x => x)).join(' ') + '?');
         };
        initialized = true;
