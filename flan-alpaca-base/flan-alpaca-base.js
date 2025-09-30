@@ -137,11 +137,14 @@ const context = [];
             return _fetch.apply(this, arguments);
         };
     })();
-    self.log = (msg) => {
-        self.postMessage(msg);
-    };
+
     // Create a text generation pipeline
     let generator, generating;
+    const initializing = Promise.withResolvers();
+    self.respond = (msg) => {
+        await initializing.promise;
+        self.postMessage(msg);
+    };
     try {
         generator = (await pipeline('text2text-generation', 'Xenova/flan-alpaca-base'));
         // Generate text
@@ -152,10 +155,12 @@ const context = [];
                 skip_prompt: true,
                 callback_function: async (token) => {
                     console.log(token);
-                    log(token);
+                    respond(token);
                     context.push(token);
                     if (String(token).trim().endsWith('</s>')) {
                         await generating?.resolve?.();
+                        initializing.resolve();
+                        console.log(context);
                     }
                 }
             });
@@ -167,6 +172,7 @@ const context = [];
             });
         };
         self.onmessage = async (event) => {
+            await initializing.promise;
             await generating?.promise;
             context.push(event.data);
             generating = Promise.withResolvers();
@@ -175,7 +181,7 @@ const context = [];
         await genNext('');
         context.pop();
     } catch (e) {
-        log(e);
+        respond(e?.message ?? e);
     }
     postMessage('ready');
 })();
