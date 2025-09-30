@@ -14,7 +14,7 @@ function textDedup(arr) {
 }
 const context = [];
 const contextPush = txt =>{
-    const tokens = textDedup(String(txt).replaceAll('</s>','').split(/\s+/).map(x=>x));
+    const tokens = textDedup(String(txt).replaceAll('</s>','').split(/\s+/).filter(x=>x));
     for(const token of tokens){
         context.push(token);
     }
