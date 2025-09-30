@@ -1,9 +1,19 @@
-//text dedup
+const stringify = x =>{
+    try{
+        return JSON.stringify(x);
+    }catch{
+        return String(x);
+    }
+};
+const unquote = x => String(x).replace(/^["'`\s]+|["'`\s]+$/g,'');
+const toString = x =>unquote(x?.join?.('') || stringify(x));
+const textEquals=(x,y)=>toString(x).toLowerCase() == toString(y).toLowerCase();
+
 function textDedup(arr) {
     for (let i = 0; i < arr.length; i++) {
         for (let x = i + 1; x < arr.length; x++) {
             for (let o = x - i; o > 1; o--) {
-                if (arr.slice(i, i + o).join('') == arr.slice(x, x + o).join('')) {
+                if (textEquals(arr.slice(i, i + o),arr.slice(x, x + o))) {
                     arr.splice(i, o);
                     return textDedup(arr);
                 }
