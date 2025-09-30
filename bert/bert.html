@@ -29,12 +29,12 @@
   context.push(passage);
   await tf.setBackend('webgl');     
   await tf.ready();
-  const model = await  qna.load();
+  const model = await qna.load();
   for(const key in model){
     log(key);
   }
   log(context.join(' ').trim().slice(0,-1).split(/[\.\?\!]/).pop());
-  const answers = await    model.findAnswers(question,context.join(' '));
+  const answers = await model.findAnswers(question,context.join(' '));
   context.push(question);
   log(stringify(answers));
   let answer = stringify(answers);
