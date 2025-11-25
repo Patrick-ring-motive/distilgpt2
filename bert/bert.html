@@ -25,7 +25,7 @@
     };
     const context = [];
     const passage = await(await fetch('First_Childrens_Encyclopedia.md')).text();
-      
+    log(passage.length);
       //'The capital of France is Paris.';
     const question = 'The capital of France is Paris?';
     context.push(passage);
