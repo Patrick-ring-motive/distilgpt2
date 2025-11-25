@@ -20,8 +20,9 @@
         return String(x);
       }
     };
+  let count = 0;
   self.log = (...x) =>{
-    document.getElementsByTagName('log')[0].innerHTML += x.join(' ') + '<br>';
+    document.getElementsByTagName('log')[0].innerHTML += String(count++) + ' ' + x.join(' ') + '<br>';
   };
    const context = [];
     
