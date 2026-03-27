@@ -1,4 +1,7 @@
-import { pipeline, TextStreamer } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers";
+import {
+  pipeline,
+  TextStreamer
+} from "https://cdn.jsdelivr.net/npm/@huggingface/transformers";
 
 // Create a text generation pipeline
 const generator = await pipeline(
@@ -7,9 +10,10 @@ const generator = await pipeline(
 );
 
 // Define the list of messages
-const messages = [
-  { role: "user", content: "Solve the equation: x^2 - 3x + 2 = 0" },
-];
+const messages = [{
+  role: "user",
+  content: "Solve the equation: x^2 - 3x + 2 = 0"
+}, ];
 
 // Create text streamer
 const streamer = new TextStreamer(generator.tokenizer, {
@@ -17,5 +21,9 @@ const streamer = new TextStreamer(generator.tokenizer, {
 })
 
 // Generate a response
-const output = await generator(messages, { max_new_tokens: 512, do_sample: false, streamer });
+const output = await generator(messages, {
+  max_new_tokens: 512,
+  do_sample: false,
+  streamer
+});
 console.log(output[0].generated_text.at(-1).content);

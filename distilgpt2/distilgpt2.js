@@ -3,7 +3,10 @@
     return new Uint8Array(await this.arrayBuffer());
   };
 });
-if (!new Request("https://test.com", { method: "POST", body: "test" }).body) {
+if (!new Request("https://test.com", {
+    method: "POST",
+    body: "test"
+  }).body) {
   Object.defineProperty(Request.prototype, "body", {
     get() {
       const $this = this;
@@ -39,7 +42,10 @@ globalThis.cancelIdleCallback ??= globalThis.cancelAnimationFrame;
 const context = [];
 (async () => {
 
-  const { pipeline, TextStreamer } = await import('../transformers.js');
+  const {
+    pipeline,
+    TextStreamer
+  } = await import('../transformers.js');
   globalThis.pipeline = pipeline;
   globalThis.TextStreamer = TextStreamer;
   console.log(TextStreamer);
@@ -96,15 +102,13 @@ const context = [];
       }
     };
 
-
-
     const cacheText = async (url) => {
       const cached = await cache.get(url);
       if (cached) {
         return await cached.clone().text();
       }
       const response = await _fetch(url);
-      if (!response.ok){
+      if (!response.ok) {
         throw new Error(`Failed to fetch ${url} ${response.statusText}`);
       }
       cache.set(url, response.clone());
@@ -142,25 +146,24 @@ const context = [];
       return res;
     };
 
-
     globalThis.fetch = async function fetch() {
       if (String(arguments[0]).endsWith('ort-wasm-simd-threaded.jsep.wasm')) {
-      //  return new Response((await _fetch(`${root}/ort-wasm-simd-threaded.jsep.wasm.gz`)).body.pipeThrough(new DecompressionStream("gzip")), { headers: { "content-type": "application/wasm" } });
+        //  return new Response((await _fetch(`${root}/ort-wasm-simd-threaded.jsep.wasm.gz`)).body.pipeThrough(new DecompressionStream("gzip")), { headers: { "content-type": "application/wasm" } });
       }
       if (String(arguments[0]).endsWith('tokenizer_config.json')) {
-      //  return new Response((await _fetch(`${root}/tokenizerconfigjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
+        //  return new Response((await _fetch(`${root}/tokenizerconfigjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
       }
       if (String(arguments[0]).endsWith('config.json')) {
-     //   return new Response((await _fetch(`${root}/configjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
+        //   return new Response((await _fetch(`${root}/configjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
       }
       if (String(arguments[0]).endsWith('tokenizer.json')) {
-      //  return new Response((await _fetch(`${root}/tokenizerjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
+        //  return new Response((await _fetch(`${root}/tokenizerjson.gz`)).body.pipeThrough(new DecompressionStream("gzip")));
       }
       if (String(arguments[0]).includes('encoder')) {
-    //    return await fetchB64Encoder();
+        //    return await fetchB64Encoder();
       }
       if (String(arguments[0]).includes('decoder')) {
-       // return await fetchB64Decoder();
+        // return await fetchB64Decoder();
       }
       return _fetch.apply(this, arguments);
     };
@@ -173,7 +176,7 @@ const context = [];
   let generator;
   try {
 
-     generator = await pipeline(
+    generator = await pipeline(
       "text-generation",
       "Xenova/distilgpt2",
     );
