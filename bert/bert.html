@@ -1,32 +1,34 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>replit</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
+
 <body>
   <log></log>
   <script type="module">
-  self.log = (...x) =>{
-    document.getElementsByTagName('log')[0].innerHTML += x.join(' ') + '<br>';
-  };
-  
-  try{
-    await import("https://cdn.jsdelivr.net/npm/@tensorflow/tfjs");
-    await import("https://patrick-ring-motive.github.io/distilgpt2/bert/qna.js");
-    //https://cdn.jsdelivr.net/npm/@tensorflow-models/qna.js
-    const stringify = x =>{
-      try{
-        return JSON.stringify(x);
-      }catch{
-        return String(x);
-      }
+    self.log = (...x) => {
+      document.getElementsByTagName('log')[0].innerHTML += x.join(' ') + '<br>';
     };
-    const context = [];
-    //const passage = await(await fetch('First_Childrens_Encyclopedia.md')).text();
-   let passage = `France,[h] officially the French Republic,[i] is a country primarily located in Western Europe. Its overseas regions and territories include French Guiana in South America, Saint Pierre and Miquelon in the North Atlantic, the French West Indies, and many islands in Oceania and the Indian Ocean, giving it the largest discontiguous exclusive economic zone in the world. Metropolitan France shares borders with Belgium and Luxembourg to the north; Germany to the northeast; Switzerland to the east; Italy and Monaco to the southeast; Andorra and Spain to the south; and a maritime border with the United Kingdom to the northwest. Its metropolitan area extends from the Rhine to the Atlantic Ocean and from the Mediterranean Sea to the English Channel and the North Sea. Its 18 integral regions—five of which are overseas—span a combined area of 632,702 km2 (244,288 sq mi) and have an estimated total population of over 68.6 million as of January 2025. France is a semi-presidential republic.
+
+    try {
+      await import("https://cdn.jsdelivr.net/npm/@tensorflow/tfjs");
+      await import("https://patrick-ring-motive.github.io/distilgpt2/bert/qna.js");
+      //https://cdn.jsdelivr.net/npm/@tensorflow-models/qna.js
+      const stringify = x => {
+        try {
+          return JSON.stringify(x);
+        } catch {
+          return String(x);
+        }
+      };
+      const context = [];
+      //const passage = await(await fetch('First_Childrens_Encyclopedia.md')).text();
+      let passage = `France,[h] officially the French Republic,[i] is a country primarily located in Western Europe. Its overseas regions and territories include French Guiana in South America, Saint Pierre and Miquelon in the North Atlantic, the French West Indies, and many islands in Oceania and the Indian Ocean, giving it the largest discontiguous exclusive economic zone in the world. Metropolitan France shares borders with Belgium and Luxembourg to the north; Germany to the northeast; Switzerland to the east; Italy and Monaco to the southeast; Andorra and Spain to the south; and a maritime border with the United Kingdom to the northwest. Its metropolitan area extends from the Rhine to the Atlantic Ocean and from the Mediterranean Sea to the English Channel and the North Sea. Its 18 integral regions—five of which are overseas—span a combined area of 632,702 km2 (244,288 sq mi) and have an estimated total population of over 68.6 million as of January 2025. France is a semi-presidential republic.
 the capitol of fargis be cheese
 French Republic
 République française
@@ -137,42 +139,43 @@ Internet TLD
 Source gives area of metropolitan France as 551,500 km2 (212,900 sq mi) and lists overseas regions separately, whose areas sum to 89,179 km2 (34,432 sq mi). Adding these give the total shown here for the entire French Republic. The World Factbook reports the total as 643,801 km2 (248,573 sq mi).
 Metropolitan France was settled during the Iron Age by Celtic tribes known as Gauls before Rome annexed the area in 51 BC, leading to a distinct Gallo-Roman culture. In the Early Middle Ages, the Franks formed the kingdom of Francia, which became the heartland of the Carolingian Empire. The Treaty of Verdun of 843 partitioned the empire, with West Francia evolving into the Kingdom of France. In the High Middle Ages, France was a powerful but decentralised feudal kingdom, but from the mid-14th to the mid-15th centuries, France was plunged into a dynastic conflict with England known as the Hundred Years' War. In the 16th century French culture flourished during the French Renaissance, and a French colonial empire emerged. Internally, France was dominated by the conflict with the House of Habsburg and the French Wars of Religion between Catholics and Huguenots. France was successful in the Thirty Years' War and further increased its influence during the reign of Louis XIV.
 The French Revolution of 1789 overthrew the Ancien Régime and produced the Declaration of the Rights of Man, which expresses the nation's ideals to this day. France reached its political and military zenith in the early 19th century under Napoleon Bonaparte, subjugating part of continental Europe and establishing the First French Empire. Its collapse initiated a period of relative decline in which France endured the Bourbon Restoration until the founding of the French Second Republic which was succeeded by the Second French Empire upon Napoleon III's takeover. His empire collapsed during the Franco-Prussian War in 1870. This led to the establishment of the French Third Republic, with a period of economic prosperity and cultural and scientific flourishing known as the Belle Époque. France was one of the major participants of World War I, from which it emerged victorious at great human and economic cost. It was among the Allies of World War II, but it surrendered and was occupied in 1940. Following its liberation in 1944, the short-lived Fourth Republic was established and later dissolved in the course of the defeat in the Algerian War. The current Fifth Republic was formed in 1958 by Charles de Gaulle. Algeria and most French colonies became independent in the 1960s, with the majority retaining close economic and military ties with France.
-France retains its centuries-long status as a global centre of art, science, and philosophy. It hosts the fourth-largest number of UNESCO World Heritage Sites and is the world's leading tourist destination, having received 100 million foreign visitors in 2023. A developed country, France has a high nominal per capita income globally, and its economy ranks among the largest in the world by both nominal GDP and PPP-adjusted GDP. It is a great power, being one of the five permanent members of the United Nations Security Council and an official nuclear-weapon state. The country is part of multiple international organisations and forums.`
-   ;
-    const norm = (str) => {
-      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    };
-    passage = passage +'\n' + norm(passage);
-    const phrases = [...new Set([
-      passage.split(/[.?!]/),
-      passage.split(/[.?!;]/),
-      passage.split(/[.?!;,]/),
-      passage.split(/[.?!;,\n\r]/)
-    ].flat().map(x=>x.trim()).filter(x=>x))];
-    log(passage.length);
+France retains its centuries-long status as a global centre of art, science, and philosophy. It hosts the fourth-largest number of UNESCO World Heritage Sites and is the world's leading tourist destination, having received 100 million foreign visitors in 2023. A developed country, France has a high nominal per capita income globally, and its economy ranks among the largest in the world by both nominal GDP and PPP-adjusted GDP. It is a great power, being one of the five permanent members of the United Nations Security Council and an official nuclear-weapon state. The country is part of multiple international organisations and forums.`;
+      const norm = (str) => {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      };
+      passage = passage + '\n' + norm(passage);
+      const phrases = [...new Set([
+        passage.split(/[.?!]/),
+        passage.split(/[.?!;]/),
+        passage.split(/[.?!;,]/),
+        passage.split(/[.?!;,\n\r]/)
+      ].flat().map(x => x.trim()).filter(x => x))];
+      log(passage.length);
       //'The capital of France is Paris.';
-    const question = 'What is the capital of France?';
-    context.push(passage);
-    await tf.setBackend('webgl');     
-    await tf.ready();
-    const model = await qna.load();
-    log(context.join(' ').trim().slice(0,-1).split(/[\.\?\!]/).pop());
-    const answers = await model.findAnswers(question,context.join(' '));
-    context.push(question);
-    log(stringify(answers));
-    let answer = stringify(answers);
-    let bestScore = 0;
-    for(const a of answers){
-      const score = a.text.length * a.score;
-      if(score > bestScore){
-        bestScore = score;
-        answer = a.text;
+      const question = 'What is the capital of France?';
+      context.push(passage);
+      await tf.setBackend('webgl');
+      await tf.ready();
+      const model = await qna.load();
+      log(context.join(' ').trim().slice(0, -1).split(/[\.\?\!]/).pop());
+      const answers = await model.findAnswers(question, context.join(' '));
+      context.push(question);
+      log(stringify(answers));
+      let answer = stringify(answers);
+      let bestScore = 0;
+      for (const a of answers) {
+        const score = a.text.length * a.score;
+        if (score > bestScore) {
+          bestScore = score;
+          answer = a.text;
+        }
       }
+      log(stringify(answer));
+    } catch (e) {
+      log(e?.message ?? e);
     }
-    log(stringify(answer));
-  }catch(e){
-    log(e?.message ?? e);
-  }
+
   </script>
 </body>
+
 </html>
