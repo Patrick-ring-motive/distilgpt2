@@ -8,27 +8,26 @@
   <link href="style.css" rel="stylesheet" type="text/css" />
   <script>
     ReadableStream.prototype[Symbol.asyncIterator] ??=
-    async function* asyncIterator() {
-      const reader = this?.getReader?.();
-      try {
-        let chunk = await reader.read();
-        while (chunk?.done === false) {
-          yield chunk?.value;
-          chunk = await reader?.read?.();
+      async function* asyncIterator() {
+        const reader = this?.getReader?.();
+        try {
+          let chunk = await reader.read();
+          while (chunk?.done === false) {
+            yield chunk?.value;
+            chunk = await reader?.read?.();
+          }
+        } finally {
+          reader?.releaseLock?.();
         }
-      } finally {
-        reader?.releaseLock?.();
-      }
-    };
-    
+      };
+
   </script>
 </head>
 
 <body>
   <input type="text" id="input"></input><button>Send</button>
   <output></output>
-  <script  type="module">
-
+  <script type="module">
     self.log = (e) => {
       if (/error/i.test(e?.constructor?.name)) {
         console.warn(e);
@@ -37,8 +36,7 @@
       }
       (
         document.querySelector("output") ??
-        document.getElementsByTagName("output")?.[0] ??
-        {}
+        document.getElementsByTagName("output")?.[0] ?? {}
       ).innerHTML += (" " + (e.message ?? e));
     };
     window.addEventListener("error", function(e) {
@@ -70,6 +68,7 @@
         gpt2.postMessage(document.getElementById('input').value);
       }
     });
+
   </script>
 </body>
 
